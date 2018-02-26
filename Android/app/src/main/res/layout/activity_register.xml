@@ -24,6 +24,14 @@
             app:srcCompat="@mipmap/ic_launcher" />
 
         <EditText
+            android:id="@+id/edtNickName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Nickname"
+            android:inputType="textPersonName" />
+
+        <EditText
             android:id="@+id/edtEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -141,13 +141,22 @@ app.post('/register', (req, res) => {
               sts="CREATED";
               res.writeHead(200, {'Content-Type': 'text/html'});
               res.end("CREATED_USER");
-
+              // notification 
+              var ip = req.headers['x-forwarded-for'] ||
+              req.connection.remoteAddress;
+              console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /Register; By EMAIL :'+EMAIL+", STATUS :"+sts );
+              //end notifiocation 
             });
         }else{
         // found this email 
           sts="REJECT_EXIST";
           res.writeHead(404, {'Content-Type': 'text/html'});
           res.end("EXIST");
+          // notification 
+          var ip = req.headers['x-forwarded-for'] ||
+          req.connection.remoteAddress;
+          console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /Register; By EMAIL :'+EMAIL+", STATUS :"+sts );
+          //end notifiocation 
         }
     });
   
@@ -171,22 +180,28 @@ app.post('/login', (req, res) => {
         if(rows.length==1){
           //not found create user 
  
-          sts="LOGGED";
+          sts=(rows[0].name);
           res.writeHead(200, {'Content-Type': 'text/html'});
-          res.end("LOGGED");
+          res.end(sts);
+          // notification 
+          var ip = req.headers['x-forwarded-for'] ||
+          req.connection.remoteAddress;
+          console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /Login; By EMAIL :'+EMAIL+", STATUS : user "+sts+" is logged" );
+          //end notifiocation 
         }else{
           sts="LOGIN_FAIL";
           res.writeHead(400, {'Content-Type': 'text/html'});
           res.end("LOGIN_FAIL");
+          // notification 
+          var ip = req.headers['x-forwarded-for'] ||
+          req.connection.remoteAddress;
+          console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /Login; By EMAIL :'+EMAIL+", STATUS :"+sts );
+          //end notifiocation 
         }
     });
   
 
-   // notification 
- var ip = req.headers['x-forwarded-for'] ||
- req.connection.remoteAddress;
- console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /Login; By EMAIL :'+EMAIL+", STATUS :"+sts );
- //end notifiocation 
+
 
 });
 
