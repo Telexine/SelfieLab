@@ -18,22 +18,34 @@
         <!-- Password Label -->
 
         <ImageView
-            android:id="@+id/avartar"
+            android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:srcCompat="@mipmap/ic_launcher" />
 
-        <TextView
-            android:id="@+id/tvMsg"
+        <EditText
+            android:id="@+id/edtEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:ems="10"
+            android:hint="Email"
+            android:inputType="textEmailAddress" />
 
-        <Button
-            android:id="@+id/btnlogin"
+        <EditText
+            android:id="@+id/edtPass1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Login" />
+            android:ems="10"
+            android:hint="Password"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:id="@+id/edtPass2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Retype Password"
+            android:inputType="textPassword" />
 
         <Button
             android:id="@+id/btnRegister"
