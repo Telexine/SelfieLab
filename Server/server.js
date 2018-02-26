@@ -1,5 +1,6 @@
 var mysql = require('mysql');
 var request = require('request');
+var md5 = require('md5');
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
@@ -10,10 +11,9 @@ var connection = mysql.createConnection({
 connection.connect()
 connection.query('SELECT 1 + 1 AS solution', function (err, rows, fields) {
   if (err) throw err
-
-  console.log('Connected ', rows[0].solution)
+  console.log('mySQL Connected ', rows[0].solution)
 })
-connection.end()
+
 
 
 
@@ -122,16 +122,79 @@ request.post({url:faceapiURL+"detect", formData:data}, function optionalCallback
 
 });
 
+}); 
+
+app.post('/register', (req, res) => {
+  
+  let EMAIL = req.body.EMAIL;
+  let password = req.body.PW;
+  let name = req.body.name;
+  let sts="";
+
+    connection.query("SELECT * FROM USERS WHERE EMAIL = '"+EMAIL+"'", function (err, rows, fields) {
+      if (err) throw err;
+        if(rows.length==0){
+          //not found create user 
+          
+            connection.query("INSERT INTO `USERS` (`ID`, `NICKNAME`, `EMAIL`, `PASSWORD`) VALUES (NULL, '"+name +"', '"+EMAIL+"', '"+md5(password)+"')", function (err, rows, fields) {
+              if (err) throw err;
+              sts="CREATED";
+              res.writeHead(200, {'Content-Type': 'text/html'});
+              res.end("CREATED_USER");
+
+            });
+        }else{
+        // found this email 
+          sts="REJECT_EXIST";
+          res.writeHead(404, {'Content-Type': 'text/html'});
+          res.end("EXIST");
+        }
+    });
+  
+
+   // notification 
+ var ip = req.headers['x-forwarded-for'] ||
+ req.connection.remoteAddress;
+ console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /Register; By EMAIL :'+EMAIL+", STATUS :"+sts );
+ //end notifiocation 
+ 
+});
+
+app.post('/login', (req, res) => {
+  
+  let EMAIL = req.body.EMAIL;
+  let password = req.body.PW;
+  let sts="";
+
+    connection.query("SELECT * FROM USERS WHERE EMAIL = '"+EMAIL+"' AND PASSWORD = '"+md5(password) +"'", function (err, rows, fields) {
+      if (err) throw err;
+        if(rows.length==1){
+          //not found create user 
+ 
+          sts="LOGGED";
+          res.writeHead(200, {'Content-Type': 'text/html'});
+          res.end("LOGGED");
+        }else{
+          sts="LOGIN_FAIL";
+          res.writeHead(400, {'Content-Type': 'text/html'});
+          res.end("LOGIN_FAIL");
+        }
+    });
+  
+
+   // notification 
+ var ip = req.headers['x-forwarded-for'] ||
+ req.connection.remoteAddress;
+ console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /Login; By EMAIL :'+EMAIL+", STATUS :"+sts );
+ //end notifiocation 
+
+});
 
 
 
 
  
-     
- 
-   
- 
- }); 
+      
 app.listen(port);
 console.log('Listening at http://localhost:' + port)
  
