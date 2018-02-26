@@ -180,7 +180,7 @@ app.post('/login', (req, res) => {
         if(rows.length==1){
           //not found create user 
  
-          sts=(rows[0].name);
+          sts=(rows[0].NICKNAME);
           res.writeHead(200, {'Content-Type': 'text/html'});
           res.end(sts);
           // notification 
