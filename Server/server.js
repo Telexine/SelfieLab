@@ -87,6 +87,7 @@ request.post({url:faceapiURL+"detect", formData:data}, function optionalCallback
   }
   //console.log('Upload successful!  Server responded with:', body);
   var obj = JSON.parse(body);
+  try{
    if (obj.faces.length==1){  
     console.log(obj.faces[0].face_token);
 
@@ -125,7 +126,12 @@ request.post({url:faceapiURL+"detect", formData:data}, function optionalCallback
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.end("NO_FACE_FOUND");
   }//more than one face detect
+  }catch(err){
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.end("NO_FACE_FOUND");
+  }
 
+  
 });
 
 }); 
