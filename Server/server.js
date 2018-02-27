@@ -179,20 +179,43 @@ app.post('/register', (req, res) => {
  
 });
 
+app.post('/peek', (req, res) => {
+  let id = req.body.id;
+  let name = req.body.name;
+  let sts=""; //status code 
+
+    connection.query("SELECT name,image FROM SAVE WHERE id ='"+id+"'" , function (err, rows, fields) {
+      if (err||rows.length==0){
+        res.writeHead(200, {'Content-Type': 'text/html'});
+        res.end("ERROR");
+      }       
+      
+              res.writeHead(200, {'Content-Type': 'text/html'});
+              res.end(rows[0].image);
+              // notification 
+              var ip = req.headers['x-forwarded-for'] ||
+              req.connection.remoteAddress;
+              console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /peek USER :'+name+' Peek at '+rows[0].name+'. picid : '+id  );
+              //end notifiocation 
+   
+    });
+  
+});
 
 app.post('/list', (req, res) => {
    
   let sts=""; //status code 
 
-    connection.query("SELECT * FROM SAVE ORDER BY score DESC limit 30" , function (err, rows, fields) {
+    connection.query("SELECT id,name,score,age,ethnicity,gender FROM SAVE ORDER BY score DESC limit 30" , function (err, rows, fields) {
       if (err){
         res.writeHead(200, {'Content-Type': 'text/html'});
         res.end("ERROR");
       }       
       let data = "";
       for(i in rows){
-        data += rows[i].name+","+rows[i].score+","+rows[i].age+","+rows[i].ethnicity+","+rows[i].gender+"^";
+        data += rows[i].id+","+rows[i].name+","+rows[i].score+","+rows[i].age+","+rows[i].ethnicity+","+rows[i].gender+"-";
       }
+
               res.writeHead(200, {'Content-Type': 'text/html'});
               res.end(data);
               // notification 
@@ -247,7 +270,7 @@ app.post('/login', (req, res) => {
   let password = req.body.PW;
   let sts="";
 
-    connection.query("SELECT * FROM USERS WHERE EMAIL = '"+EMAIL+"' AND PASSWORD = '"+md5(password) +"'", function (err, rows, fields) {
+    connection.query("SELECT NICKNAME FROM USERS WHERE EMAIL = '"+EMAIL+"' AND PASSWORD = '"+md5(password) +"'", function (err, rows, fields) {
       if (err) throw err;
         if(rows.length==1){
           //not found create user 

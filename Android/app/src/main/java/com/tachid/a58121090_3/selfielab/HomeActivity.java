@@ -1,16 +1,21 @@
 package com.tachid.a58121090_3.selfielab;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewStub;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -35,13 +40,14 @@ public class HomeActivity extends AppCompatActivity {
 
 
     ViewStub vH, vl, vS;
-    ImageView Photo;
+    ImageView Photo,peek;
 
     Button btnHcam,Cal;
     ProgressDialog loadingDialog;
     Bitmap imgBMG;
     String _IMG,_Email,_Name;
 
+    Dialog Imbox;
 
     //leader board
     ListView Display;
@@ -50,9 +56,9 @@ public class HomeActivity extends AppCompatActivity {
     HashMap<String, String> myMap;
 
 
+    ArrayList IDlst;
 
-
-
+    int _i_temp;
 
     private TextView mTextMessage;
 
@@ -83,68 +89,124 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_home);
 
 
-        Bundle extras = getIntent().getExtras();
+            Bundle extras = getIntent().getExtras();
 
-        _Email = (String) extras.get("Email");
-        _Name = (String) extras.get("name");
+            _Email = (String) extras.get("Email");
+            _Name = (String) extras.get("name");
 
-        //lst
-        vl = (ViewStub) findViewById(R.id.vsList);
-        vl.setLayoutResource(R.layout.layout_list);
-        vl.inflate();
+            //lst
+            vl = (ViewStub) findViewById(R.id.vsList);
+            vl.setLayoutResource(R.layout.layout_list);
+            vl.inflate();
 
-        Display = (ListView) findViewById(R.id.display);
+            Display = (ListView) findViewById(R.id.display);
 
+            Imbox = new Dialog(HomeActivity.this);
+            Imbox.setContentView(R.layout.imshow_layout);
+            Imbox.setTitle("Image");
+            Imbox.setCancelable(true);
 
-
-
-
-        //home
-        vH = (ViewStub) findViewById(R.id.vsHome);
-        vH.setLayoutResource(R.layout.layout_home);
-        vH.inflate();
+            peek = (ImageView) Imbox.findViewById(R.id.ivPeek);
 
 
+            Display.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    if(position==0){return;}
+
+                    _i_temp = position-1;
 
 
-        vH.setVisibility(View.VISIBLE);
-        vl.setVisibility(View.INVISIBLE);
+                    RequestQueue requestQueue = Volley.newRequestQueue(HomeActivity.this);
+
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://ec2-35-165-235-120.us-west-2.compute.amazonaws.com:3030/peek", new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+
+                            if(response.equals("ERROR")){
+                                loadingDialog.dismiss();
+                                Toast.makeText(HomeActivity.this, "ERROR", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                                Bitmap temp = _function.convert(response);
+                              peek.setImageBitmap(temp);
+                            Imbox.show();
+
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            loadingDialog.dismiss();
+                            Toast.makeText(HomeActivity.this, ""+error, Toast.LENGTH_SHORT).show();
+
+                        }
+                    }){
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String,String> param = new HashMap<>();
 
 
-        btnHcam = (Button) findViewById(R.id.btnCam);
-        Cal = (Button) findViewById(R.id.btnCalculate);
-        Photo = (ImageView) findViewById(R.id.ivResult);
+                            param.put("id",IDlst.get(_i_temp)+"");
+                            param.put("name",_Name);
+                            return param;
+                        }
+                    };
 
-        Cal.setVisibility(View.INVISIBLE);
-        btnHcam.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dispatchTakePictureIntent();
-            }
-        });
-        Cal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                    requestQueue.add(stringRequest);
 
 
-                loadingDialog = ProgressDialog.show(HomeActivity.this, "Uploading photos", "Analyzing...", true, false);
-                String cal_URL= "http://ec2-35-165-235-120.us-west-2.compute.amazonaws.com:3030/facelab";
-                uploaduserimage();
 
-            }
-        });
+                }
+            });
+
+
+            //home
+            vH = (ViewStub) findViewById(R.id.vsHome);
+            vH.setLayoutResource(R.layout.layout_home);
+            vH.inflate();
 
 
 
 
-        mTextMessage = (TextView) findViewById(R.id.message);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+            vH.setVisibility(View.VISIBLE);
+            vl.setVisibility(View.INVISIBLE);
+
+
+            btnHcam = (Button) findViewById(R.id.btnCam);
+            Cal = (Button) findViewById(R.id.btnCalculate);
+            Photo = (ImageView) findViewById(R.id.ivResult);
+
+            Cal.setVisibility(View.INVISIBLE);
+            btnHcam.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    dispatchTakePictureIntent();
+                }
+            });
+            Cal.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    loadingDialog = ProgressDialog.show(HomeActivity.this, "Uploading photos", "Analyzing...", true, false);
+                    String cal_URL= "http://ec2-35-165-235-120.us-west-2.compute.amazonaws.com:3030/facelab";
+                    uploaduserimage();
+
+                }
+            });
+
+
+
+
+            mTextMessage = (TextView) findViewById(R.id.message);
+            BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+            navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
     @Override
@@ -190,9 +252,11 @@ public class HomeActivity extends AppCompatActivity {
                 }
                 //Toast.makeText(HomeActivity.this, ""+response, Toast.LENGTH_SHORT).show();
 
+                IDlst = new ArrayList();
+
 
                 String[] from = new String[]{"txt1", "txt2","txt3","txt4","txt5","txt6"};
-                int[] to = new int[]{R.id.txt1, R.id.txt2,R.id.txt3};
+                int[] to = new int[]{R.id.txt1, R.id.txt2,R.id.txt3,R.id.txt4,R.id.txt5,R.id.txt6};
                 fill_data = new ArrayList<HashMap<String, String>>();
 
 
@@ -208,18 +272,19 @@ public class HomeActivity extends AppCompatActivity {
                 fill_data.add(myMap);
 
 
-                String row[] = response.split("^");
+                String[] row = response.toString().split("-");
                 for(int i = 0;i<row.length;i++){
                     String col[] = row[i].split(",");
                     myMap = new HashMap<String, String>();
                     myMap.put("txt1", (i+1)+".");
-                    myMap.put("txt2", col[0]);
-                    myMap.put("txt3", col[2]);
-                    myMap.put("txt4",  col[3]);
-                    myMap.put("txt5", col[4]);
-                    myMap.put("txt6",  col[1]+"%");
+                    myMap.put("txt2", col[1]);
+                    myMap.put("txt3", col[3]);
+                    myMap.put("txt4",  col[4]);
+                    myMap.put("txt5", col[5]);
+                    myMap.put("txt6",  col[2]+"%");
                     fill_data.add(myMap);
-                }
+                    IDlst.add(col[0]);
+;                }
 
 
 
@@ -239,9 +304,6 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
-
-
-
         requestQueue.add(stringRequest);
 
     }
