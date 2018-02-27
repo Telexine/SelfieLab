@@ -64,12 +64,6 @@ app.post('/facelab', (req, res) => {
   let image = req.body.image;
   let email = req.body.Email;
   
-   // notification 
- var ip = req.headers['x-forwarded-for'] ||
- req.connection.remoteAddress;
- console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /facelab; selfie From : '+email );
- //end notifiocation 
- 
 
 
  let data = {
@@ -89,7 +83,7 @@ request.post({url:faceapiURL+"detect", formData:data}, function optionalCallback
   var obj = JSON.parse(body);
   try{
    if (obj.faces.length==1){  
-    console.log(obj.faces[0].face_token);
+ 
 
     // get face Token then analize
 
@@ -114,9 +108,13 @@ request.post({url:faceapiURL+"detect", formData:data}, function optionalCallback
       faceResult.faces[0].attributes.beauty.male_score+","+
       faceResult.faces[0].attributes.ethnicity.value;
 
-
-      console.log(return_data);
-
+   // notification 
+   var ip = req.headers['x-forwarded-for'] ||
+   req.connection.remoteAddress;
+   console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /facelab; selfie From : '+email+" " +return_data);
+   //end notifiocation 
+   
+   
 
       res.writeHead(200, {'Content-Type': 'text/html'});
       res.end(return_data);
@@ -180,6 +178,68 @@ app.post('/register', (req, res) => {
  //end notifiocation 
  
 });
+
+
+app.post('/list', (req, res) => {
+   
+  let sts=""; //status code 
+
+    connection.query("SELECT * FROM SAVE ORDER BY score DESC limit 30" , function (err, rows, fields) {
+      if (err){
+        res.writeHead(200, {'Content-Type': 'text/html'});
+        res.end("ERROR");
+      }       
+      let data = "";
+      for(i in rows){
+        data += rows[i].name+","+rows[i].score+","+rows[i].age+","+rows[i].ethnicity+","+rows[i].gender+"^";
+      }
+              res.writeHead(200, {'Content-Type': 'text/html'});
+              res.end(data);
+              // notification 
+              var ip = req.headers['x-forwarded-for'] ||
+              req.connection.remoteAddress;
+              console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /List'  );
+              //end notifiocation 
+   
+    });
+  
+});
+
+
+app.post('/save', (req, res) => {
+  
+  let EMAIL = req.body.email;
+  let name = req.body.name;
+  let image = req.body.image;
+  let score = req.body.score;
+  let age  = req.body.age;
+  let ethnicity  = req.body.eth;
+  let gender = req.body.gender;
+
+  let sts=""; //status code 
+    let q = "INSERT INTO `SAVE`  (`id`, `email`,`name`, `score`, `age`, `ethnicity`, `gender`, `image`) VALUES (NULL,"+
+    "'"+EMAIL+"',"+"'"+name+"'"+",'"+score+"',"+"'"+age+"',"+"'"+ethnicity+"',"+"'"+gender+"',"+"'"+image+"')";
+    
+    console.log(q);
+    
+    connection.query(q, function (err, rows, fields) {
+      if (err){
+        res.writeHead(200, {'Content-Type': 'text/html'});
+        res.end("ERROR");
+      } 
+              res.writeHead(200, {'Content-Type': 'text/html'});
+              res.end("SAVED");
+              // notification 
+              var ip = req.headers['x-forwarded-for'] ||
+              req.connection.remoteAddress;
+              console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /Save  By EMAIL :'+EMAIL );
+              //end notifiocation 
+   
+    });
+  
+});
+
+
 
 app.post('/login', (req, res) => {
   

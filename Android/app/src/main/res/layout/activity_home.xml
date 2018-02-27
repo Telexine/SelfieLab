@@ -16,6 +16,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout="@layout/layout_home" />
+
+        <ViewStub
+            android:id="@+id/vsList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout="@layout/layout_list" />
     </FrameLayout>
 
     <android.support.design.widget.BottomNavigationView
