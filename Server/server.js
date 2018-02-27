@@ -195,7 +195,7 @@ app.post('/peek', (req, res) => {
               // notification 
               var ip = req.headers['x-forwarded-for'] ||
               req.connection.remoteAddress;
-              console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /peek USER :'+name+' Peek at '+rows[0].name+'. picid : '+id  );
+              console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /peek USER :'+name+' Peek at '+rows[0].name+'. Picture id : '+id  );
               //end notifiocation 
    
     });

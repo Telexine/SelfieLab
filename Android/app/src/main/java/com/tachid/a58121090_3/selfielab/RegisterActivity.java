@@ -2,7 +2,9 @@ package com.tachid.a58121090_3.selfielab;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,6 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
     EditText Email, PW1, PW2, Name;
     RequestQueue queue;
 
+    SharedPreferences sp;
 
     HttpClient hc;
     HttpPost hp;
@@ -58,6 +61,11 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
+
+
+
+        sp = PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences.Editor editor = sp.edit();
 
 
         //init element
@@ -110,11 +118,17 @@ public class RegisterActivity extends AppCompatActivity {
                     data = br.readLine();
 
                     if (data.equals("CREATED_USER")) {
-                        // pass
+                        // go to home
                         Toast.makeText(RegisterActivity.this,"Welcome "+Name.getText().toString(),Toast.LENGTH_LONG).show();
                         Intent ns = new Intent(RegisterActivity.this,HomeActivity.class);
                         ns.putExtra("name",Name.getText().toString());
                         ns.putExtra("Email",Email.getText().toString());
+                        //save to pref
+                        editor.putBoolean("LOGGED",true);
+                        editor.putString("name",Name.getText().toString());
+                        editor.putString("Email",Email.getText().toString());
+                        editor.commit();
+                        ns.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(ns);
                     } else {
                         Toast.makeText(RegisterActivity.this,"This Email already In use",Toast.LENGTH_LONG).show();

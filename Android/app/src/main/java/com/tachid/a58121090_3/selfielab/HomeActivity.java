@@ -3,9 +3,12 @@ package com.tachid.a58121090_3.selfielab;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -42,7 +45,7 @@ public class HomeActivity extends AppCompatActivity {
     ViewStub vH, vl, vS;
     ImageView Photo,peek;
 
-    Button btnHcam,Cal;
+    Button btnHcam,Cal,btnweb;
     ProgressDialog loadingDialog;
     Bitmap imgBMG;
     String _IMG,_Email,_Name;
@@ -60,7 +63,7 @@ public class HomeActivity extends AppCompatActivity {
 
     int _i_temp;
 
-    private TextView mTextMessage;
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -71,16 +74,21 @@ public class HomeActivity extends AppCompatActivity {
                 case R.id.navigation_home:
                     vH.setVisibility(View.VISIBLE);
                     vl.setVisibility(View.INVISIBLE);
+                    vS.setVisibility(View.INVISIBLE);
                     return true;
                 case R.id.navigation_dashboard:
-                    loadingDialog = ProgressDialog.show(HomeActivity.this, "Fetching from Server", "Loading...", true, false);
+
                     fill();
                     loadingDialog.dismiss();
                     vH.setVisibility(View.INVISIBLE);
                     vl.setVisibility(View.VISIBLE);
+                    vS.setVisibility(View.INVISIBLE);
                     return true;
+
                 case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
+                    vH.setVisibility(View.INVISIBLE);
+                    vl.setVisibility(View.INVISIBLE);
+                    vS.setVisibility(View.VISIBLE);
                     return true;
             }
             return false;
@@ -93,10 +101,21 @@ public class HomeActivity extends AppCompatActivity {
             setContentView(R.layout.activity_home);
 
 
+
+
+
+
             Bundle extras = getIntent().getExtras();
 
             _Email = (String) extras.get("Email");
             _Name = (String) extras.get("name");
+
+
+            //setting
+
+            vS = (ViewStub) findViewById(R.id.vsSetting);
+                vS.setLayoutResource(R.layout.layout_setting);
+                vS.inflate();
 
             //lst
             vl = (ViewStub) findViewById(R.id.vsList);
@@ -112,6 +131,16 @@ public class HomeActivity extends AppCompatActivity {
 
             peek = (ImageView) Imbox.findViewById(R.id.ivPeek);
 
+
+        btnweb = (Button)findViewById(R.id.btnweb);
+        btnweb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Telexine/SelfieLab"));
+                startActivity(browserIntent);
+            }
+        });
 
             Display.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -175,7 +204,7 @@ public class HomeActivity extends AppCompatActivity {
 
             vH.setVisibility(View.VISIBLE);
             vl.setVisibility(View.INVISIBLE);
-
+            vS.setVisibility(View.INVISIBLE);
 
             btnHcam = (Button) findViewById(R.id.btnCam);
             Cal = (Button) findViewById(R.id.btnCalculate);
@@ -203,8 +232,6 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
-
-            mTextMessage = (TextView) findViewById(R.id.message);
             BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
             navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
@@ -234,7 +261,7 @@ public class HomeActivity extends AppCompatActivity {
 
     public void fill(){
 
-
+        loadingDialog = ProgressDialog.show(HomeActivity.this, "Fetching from Server", "Loading...", true, false);
 
         myAdapter = null;
 

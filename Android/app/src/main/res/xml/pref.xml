@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:disableDependentsState="false"
+        android:key="LOGGED"
+        android:persistent="true"
+        android:title="Check box preference" />
+    <EditTextPreference
+        android:defaultValue="guest"
+        android:key="name"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="Edit text preference" />
+    <EditTextPreference
+        android:defaultValue="Email"
+        android:key="Email@hotmail.com"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="Edit text preference" />
+</PreferenceScreen>

@@ -1,6 +1,9 @@
 package com.tachid.a58121090_3.selfielab;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -34,6 +37,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
+
+
+
 
         //init element
         Login = (Button) findViewById(R.id.btnlogin) ;
@@ -74,11 +82,14 @@ public class LoginActivity extends AppCompatActivity {
                     data = br.readLine();
 
                     if (!data.equals("LOGIN_FAIL")) {
-                        // pass
+                        // Logged, Go to home
                         Toast.makeText(LoginActivity.this,"Welcome "+data,Toast.LENGTH_LONG).show();
                         Intent ns = new Intent(LoginActivity.this,HomeActivity.class);
                         ns.putExtra("Email",Email.getText().toString());
                         ns.putExtra("name", data);
+
+
+
 
                         startActivity(ns);
                     } else {
