@@ -82,11 +82,17 @@ public class RegisterActivity extends AppCompatActivity {
 
 
 
-                if (!(PW1.getText().toString().equals(PW1.getText().toString())) || PW1.getText().toString() == "") {
+                if (!(PW1.getText().toString().equals(PW2.getText().toString())) || PW1.getText().toString() == "") {
                     Toast.makeText(RegisterActivity.this, "Password does not match", Toast.LENGTH_SHORT).show();
+                    PW1.setText("");
+                    PW2.setText("");
                     return;
                 }
 
+                if(Email.getText().toString()==""||Name.getText().toString()==""){
+                    Toast.makeText(RegisterActivity.this, "Please Fill All the Data", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 HttpClient hc;
                 HttpPost hp;
