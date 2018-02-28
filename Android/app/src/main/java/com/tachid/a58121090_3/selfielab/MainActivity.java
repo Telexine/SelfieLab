@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         Login = (Button) findViewById(R.id.btnlogin) ;
         Register = (Button) findViewById(R.id.btnRegister) ;
         iv= (ImageView)  findViewById(R.id.avartar) ;
-        msg= (TextView)  findViewById(R.id.tvMsg) ;
+
 
 
         Login.setOnClickListener(new View.OnClickListener() {

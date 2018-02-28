@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -101,6 +103,11 @@ public class HomeActivity extends AppCompatActivity {
             setContentView(R.layout.activity_home);
 
 
+        //add logo
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.selfielab);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#f6eeba")));
 
 
 
@@ -288,12 +295,12 @@ public class HomeActivity extends AppCompatActivity {
 
 
                 myMap = new HashMap<String, String>();
-                myMap.put("txt1", "No.");
-                myMap.put("txt2", "Name");
-                myMap.put("txt3", "age");
-                myMap.put("txt4", "ethnic");
-                myMap.put("txt5", "gender");
-                myMap.put("txt6", "Hot Score");
+                myMap.put("txt1", "NO.");
+                myMap.put("txt2", "NAME");
+                myMap.put("txt3", "AGE");
+                myMap.put("txt4", "ETHNIC");
+                myMap.put("txt5", "GENDER");
+                myMap.put("txt6", "HOT SCORE");
 
 
                 fill_data.add(myMap);

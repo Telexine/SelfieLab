@@ -47,7 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
     EditText Email, PW1, PW2, Name;
     RequestQueue queue;
 
-    SharedPreferences sp;
+
 
     HttpClient hc;
     HttpPost hp;
@@ -62,10 +62,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
 
+        //hide bar
+        getSupportActionBar().hide();
 
-
-        sp = PreferenceManager.getDefaultSharedPreferences(this);
-        final SharedPreferences.Editor editor = sp.edit();
 
 
         //init element
@@ -124,10 +123,7 @@ public class RegisterActivity extends AppCompatActivity {
                         ns.putExtra("name",Name.getText().toString());
                         ns.putExtra("Email",Email.getText().toString());
                         //save to pref
-                        editor.putBoolean("LOGGED",true);
-                        editor.putString("name",Name.getText().toString());
-                        editor.putString("Email",Email.getText().toString());
-                        editor.commit();
+
                         ns.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(ns);
                     } else {

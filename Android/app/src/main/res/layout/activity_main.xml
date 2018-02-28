@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
+    android:background="#f6eeba"
     android:layout_height="fill_parent"
     android:fitsSystemWindows="true">
 
@@ -11,6 +12,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="56dp"
         android:paddingLeft="24dp"
+        android:background="#f6eeba"
         android:paddingRight="24dp">
 
         <!-- Email Label -->
@@ -21,22 +23,18 @@
             android:id="@+id/avartar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:srcCompat="@mipmap/ic_launcher" />
-
-        <TextView
-            android:id="@+id/tvMsg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+            app:srcCompat="@drawable/selfielab" />
 
         <Button
             android:id="@+id/btnlogin"
+            style="@android:style/Widget.Holo.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Login" />
 
         <Button
             android:id="@+id/btnRegister"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Register" />
