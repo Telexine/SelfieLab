@@ -85,75 +85,113 @@ public class result extends AppCompatActivity {
         ms.setText(score+" %");
         _Email = (String) extras.get("email");
 
-        Female_S.setProgress( Math.round(score) );
+        Female_S.setProgress( Math.round(score) ,true);
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                loadingDialog = ProgressDialog.show(result.this, "Upload to Server", "Save...", true, false);
-
-                RequestQueue requestQueue = Volley.newRequestQueue(result.this);
-
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://ec2-35-165-235-120.us-west-2.compute.amazonaws.com:3030/save", new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        if(response.equals("ERROR")){
-                            loadingDialog.dismiss();
-                            Toast.makeText(result.this, "Save ERROR", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        Toast.makeText(result.this, "Save Complete", Toast.LENGTH_SHORT).show();
 
 
-                        loadingDialog.dismiss();
-                        AlertDialog.Builder builder1 = new AlertDialog.Builder(result.this);
-                        builder1.setMessage("Save to Server Complete.");
-                        builder1.setCancelable(true);
 
-                        builder1.setPositiveButton(
-                                "ok",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        finish();
-                                        dialog.cancel();
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(result.this);
+                builder1.setMessage("This Image Will be upload to public And everyone can see it. Are you sure?");
+                builder1.setCancelable(true);
+
+                builder1.setPositiveButton(
+                        "yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+
+                                loadingDialog = ProgressDialog.show(result.this, "Upload to Server", "Save...", true, false);
+
+                                RequestQueue requestQueue = Volley.newRequestQueue(result.this);
+
+                                StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://ec2-35-165-235-120.us-west-2.compute.amazonaws.com:3030/save", new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+
+                                        if(response.equals("ERROR")){
+                                            loadingDialog.dismiss();
+                                            Toast.makeText(result.this, "Save ERROR", Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                        Toast.makeText(result.this, "Save Complete", Toast.LENGTH_SHORT).show();
+
+
+                                        loadingDialog.dismiss();
+                                        AlertDialog.Builder builder1 = new AlertDialog.Builder(result.this);
+                                        builder1.setMessage("Save to Server Complete.");
+                                        builder1.setCancelable(true);
+
+                                        builder1.setPositiveButton(
+                                                "ok",
+                                                new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int id) {
+                                                        finish();
+                                                        dialog.cancel();
+
+                                                    }
+                                                });
+
+
+
+                                        AlertDialog alert11 = builder1.create();
+                                        alert11.show();
 
                                     }
-                                });
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        loadingDialog.dismiss();
+                                        Toast.makeText(result.this, ""+error, Toast.LENGTH_SHORT).show();
+
+                                    }
+                                }){
+                                    @Override
+                                    protected Map<String, String> getParams() throws AuthFailureError {
+                                        Map<String,String> param = new HashMap<>();
+
+                                        param.put("name",name.getText().toString());
+                                        param.put("score",score+"");
+
+                                        param.put("age",age.getText().toString());
+                                        param.put("eth",eth.getText().toString());
+                                        param.put("gender",gender.getText().toString());
+
+                                        param.put("image",_function.encodeImage((Bitmap) getIntent().getParcelableExtra("img")));
+                                        param.put("email",(String) extras.get("email"));
+                                        return param;
+                                    }
+                                };
+
+                                requestQueue.add(stringRequest);
+
+                            }
+                        });
+                builder1.setNegativeButton(
+                        "no",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                finish();
+                                dialog.cancel();
+                                return;
+
+
+                            }
+                        });
+
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
 
 
 
-                        AlertDialog alert11 = builder1.create();
-                        alert11.show();
 
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        loadingDialog.dismiss();
-                        Toast.makeText(result.this, ""+error, Toast.LENGTH_SHORT).show();
 
-                    }
-                }){
-                    @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
-                        Map<String,String> param = new HashMap<>();
 
-                        param.put("name",name.getText().toString());
-                        param.put("score",score+"");
 
-                        param.put("age",age.getText().toString());
-                        param.put("eth",eth.getText().toString());
-                        param.put("gender",gender.getText().toString());
 
-                        param.put("image",_function.encodeImage((Bitmap) getIntent().getParcelableExtra("img")));
-                         param.put("email",(String) extras.get("email"));
-                        return param;
-                    }
-                };
-
-                requestQueue.add(stringRequest);
 
 
 
