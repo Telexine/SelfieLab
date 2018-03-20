@@ -1,5 +1,6 @@
 # SelfieLab
-Selfie Processing Android Application using Face++ API api and Node js. Express + mysql
+![alt text](https://travis-ci.org/Telexine/SelfieLab.svg?branch=master) Selfie Processing Android Application using Face++ API api and Node js. Express + mysql
+
 ### Stack
  - Android
  - Node JS (Express)
