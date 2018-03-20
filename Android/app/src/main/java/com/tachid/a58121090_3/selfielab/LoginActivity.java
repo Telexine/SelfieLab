@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 hc = new DefaultHttpClient();
 
-                hp = new HttpPost("http://ec2-35-165-235-120.us-west-2.compute.amazonaws.com:3030/login");
+                hp = new HttpPost(_function._ServerUrl+"login");
 
 
                 try {

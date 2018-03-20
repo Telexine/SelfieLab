@@ -160,7 +160,7 @@ public class HomeActivity extends AppCompatActivity {
 
                     RequestQueue requestQueue = Volley.newRequestQueue(HomeActivity.this);
 
-                    StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://ec2-35-165-235-120.us-west-2.compute.amazonaws.com:3030/peek", new Response.Listener<String>() {
+                    StringRequest stringRequest = new StringRequest(Request.Method.POST, _function._ServerUrl+"peek", new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
 
@@ -231,7 +231,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
                     loadingDialog = ProgressDialog.show(HomeActivity.this, "Uploading photos", "Analyzing...", true, false);
-                    String cal_URL= "http://ec2-35-165-235-120.us-west-2.compute.amazonaws.com:3030/facelab";
+                    String cal_URL= _function._ServerUrl+"facelab";
                     uploaduserimage();
 
                 }
@@ -275,7 +275,7 @@ public class HomeActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(HomeActivity.this);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://ec2-35-165-235-120.us-west-2.compute.amazonaws.com:3030/list", new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, _function._ServerUrl+"list", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
@@ -347,7 +347,7 @@ public class HomeActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(HomeActivity.this);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://ec2-35-165-235-120.us-west-2.compute.amazonaws.com:3030/facelab", new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, _function._ServerUrl+"facelab", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 

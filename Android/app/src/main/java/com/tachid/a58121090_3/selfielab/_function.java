@@ -12,6 +12,9 @@ import java.io.ByteArrayOutputStream;
 
 public class _function {
 
+    public static final String _ServerUrl =    "http://____/"; // URL For Server
+
+
     public  static String encodeImage(Bitmap bm)
     {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -30,5 +33,6 @@ public class _function {
 
         return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
     }
+
 
 }

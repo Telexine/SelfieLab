@@ -108,7 +108,7 @@ public class result extends AppCompatActivity {
 
                                 RequestQueue requestQueue = Volley.newRequestQueue(result.this);
 
-                                StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://ec2-35-165-235-120.us-west-2.compute.amazonaws.com:3030/save", new Response.Listener<String>() {
+                                StringRequest stringRequest = new StringRequest(Request.Method.POST, _function._ServerUrl+"save", new Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String response) {
 

@@ -11,7 +11,7 @@ var connection = mysql.createConnection({
 connection.connect()
 connection.query('SELECT 1 + 1 AS solution', function (err, rows, fields) {
   if (err) throw err
-  console.log('mySQL Connected ', rows[0].solution)
+  console.log('mySQL Connected')
 })
 
 
@@ -21,7 +21,7 @@ connection.query('SELECT 1 + 1 AS solution', function (err, rows, fields) {
 /*#########################################################
 ##                           Express                    ###
 #########################################################*/
-
+// http://ec2-35-165-235-120.us-west-2.compute.amazonaws.com:3030/
 
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -35,20 +35,6 @@ let fppAPI={
   api_key:"mwxX59ERyaRPBeJ3iTZbuFPxAXvbBcKm",
   api_secret:"Evg2nMFSEEY9qCp4omChWKaD4HJFyeGY",
 }
- 
-
-
-
-// Send  HTML page to client
-app.get('/debug101', function(req, res){
-    var ip = req.headers['x-forwarded-for'] ||
-    req.connection.remoteAddress;
-    console.log("["+ip.replace("::ffff:","")+svrts()+' ~] "GET /debug101.html:3000"')
-
-    var html = fs.readFileSync('index.html');
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.end("couponChain");
-});
 
 app.use(bodyParser.urlencoded({
     extended: true
