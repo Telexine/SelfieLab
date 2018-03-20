@@ -9,6 +9,7 @@ before_script:
   - node --version
   - npm --version
   - node_modules/.bin/newman --version
-
+  - node server.js
+  
 script:
-  - node_modules/.bin/newman run unit_test/Selfie.postman_collection.json
+  - node_modules/.bin/newman run Server/unit_test/Selfie.postman_collection.json
