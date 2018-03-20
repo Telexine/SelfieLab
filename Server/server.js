@@ -8,7 +8,7 @@ var connection = mysql.createConnection({
   database : 'SelfieLab'
 });
 
-connection.connect()
+connection.connect();
 connection.query('SELECT 1 + 1 AS solution', function (err, rows, fields) {
   if (err) throw err
   console.log('mySQL Connected')
@@ -120,6 +120,60 @@ request.post({url:faceapiURL+"detect", formData:data}, function optionalCallback
 
 }); 
 
+app.post('/getlog',(req,res)=>{
+  let key = req.body.key;
+  if(key=="afa3fed9d35be1c01eda7b759fd8b504"){
+
+    
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    //res.end("ERROR");
+    // notification 
+    var ip = req.headers['x-forwarded-for'] ||
+    req.connection.remoteAddress;
+    console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /getlog; gotTestLog' );
+    //end notifiocation 
+
+  }
+
+  res.writeHead(400, {'Content-Type': 'text/html'});
+  res.end("ERROR");
+  // notification 
+  var ip = req.headers['x-forwarded-for'] ||
+  req.connection.remoteAddress;
+  console.log("["+ip.replace("::ffff:","")+ svrts()+' ~]  "POST /getlog; Fail' );
+  //end notifiocation 
+});
+
+app.post('/deltestafa3fed9d35be1c01eda7b759fd8b504',(req,res)=>{
+ 
+  if(!key=="afa3fed9d35be1c01eda7b759fd8b504"){
+    
+    res.writeHead(400, {'Content-Type': 'text/html'});
+    res.end("ERROR");
+    // notification 
+    var ip = req.headers['x-forwarded-for'] ||
+    req.connection.remoteAddress;
+    console.log("["+ip.replace("::ffff:","")+ svrts()+' ~]  "POST /deltest; Delete Unit Test Fail' );
+    //end notifiocation 
+
+  }
+
+      connection.query("DELETE FROM USERS WHERE EMAIL = 'Testuser' ", function (err, rows, fields) {
+        if (err) throw err;
+         
+
+        res.writeHead(200, {'Content-Type': 'text/html'});
+        res.end("200");
+        // notification 
+        var ip = req.headers['x-forwarded-for'] ||
+        req.connection.remoteAddress;
+        console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /deltest; Delete Test Unit Complete');
+        //end notifiocation 
+      });
+ 
+
+});
+
 app.post('/register', (req, res) => {
   
   let EMAIL = req.body.EMAIL;
@@ -229,7 +283,7 @@ app.post('/save', (req, res) => {
     let q = "INSERT INTO `SAVE`  (`id`, `email`,`name`, `score`, `age`, `ethnicity`, `gender`, `image`) VALUES (NULL,"+
     "'"+EMAIL+"',"+"'"+name+"'"+",'"+score+"',"+"'"+age+"',"+"'"+ethnicity+"',"+"'"+gender+"',"+"'"+image+"')";
     
-    console.log(q);
+  
     
     connection.query(q, function (err, rows, fields) {
       if (err){
