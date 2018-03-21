@@ -1,6 +1,7 @@
 var mysql = require('mysql');
 var request = require('request');
 var md5 = require('md5');
+var winston = require('winston');
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
@@ -11,12 +12,17 @@ var connection = mysql.createConnection({
 connection.connect();
 connection.query('SELECT 1 + 1 AS solution', function (err, rows, fields) {
   if (err) throw err
-  console.log('mySQL Connected')
+  logs('mySQL Connected')
 })
 
-
-
-
+// log 
+var logger = new(winston.Logger)({
+  transports: [
+      new(winston.transports.Console)(),
+      new(winston.transports.File)({filename: './logs/app.log'})
+  ]
+});
+ 
 
 /*#########################################################
 ##                           Express                    ###
@@ -97,7 +103,7 @@ request.post({url:faceapiURL+"detect", formData:data}, function optionalCallback
    // notification 
    var ip = req.headers['x-forwarded-for'] ||
    req.connection.remoteAddress;
-   console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /facelab; selfie From : '+email+" " +return_data);
+   logs("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /facelab; selfie From : '+email+" " +return_data);
    //end notifiocation 
    
    
@@ -130,7 +136,7 @@ app.post('/getlog',(req,res)=>{
     // notification 
     var ip = req.headers['x-forwarded-for'] ||
     req.connection.remoteAddress;
-    console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /getlog; gotTestLog' );
+    logs("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /getlog; gotTestLog' );
     //end notifiocation 
 
   }
@@ -140,7 +146,7 @@ app.post('/getlog',(req,res)=>{
   // notification 
   var ip = req.headers['x-forwarded-for'] ||
   req.connection.remoteAddress;
-  console.log("["+ip.replace("::ffff:","")+ svrts()+' ~]  "POST /getlog; Fail' );
+  logs("["+ip.replace("::ffff:","")+ svrts()+' ~]  "POST /getlog; Fail' );
   //end notifiocation 
 });
 
@@ -153,7 +159,7 @@ app.post('/deltestafa3fed9d35be1c01eda7b759fd8b504',(req,res)=>{
     // notification 
     var ip = req.headers['x-forwarded-for'] ||
     req.connection.remoteAddress;
-    console.log("["+ip.replace("::ffff:","")+ svrts()+' ~]  "POST /deltest; Delete Unit Test Fail' );
+    logs("["+ip.replace("::ffff:","")+ svrts()+' ~]  "POST /deltest; Delete Unit Test Fail' );
     //end notifiocation 
 
   }
@@ -167,7 +173,7 @@ app.post('/deltestafa3fed9d35be1c01eda7b759fd8b504',(req,res)=>{
         // notification 
         var ip = req.headers['x-forwarded-for'] ||
         req.connection.remoteAddress;
-        console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /deltest; Delete Test Unit Complete');
+        logs("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /deltest; Delete Test Unit Complete');
         //end notifiocation 
       });
  
@@ -194,7 +200,7 @@ app.post('/register', (req, res) => {
               // notification 
               var ip = req.headers['x-forwarded-for'] ||
               req.connection.remoteAddress;
-              console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /Register; By EMAIL :'+EMAIL+", STATUS :"+sts );
+              logs("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /Register; By EMAIL :'+EMAIL+", STATUS :"+sts );
               //end notifiocation 
             });
         }else{
@@ -205,7 +211,7 @@ app.post('/register', (req, res) => {
           // notification 
           var ip = req.headers['x-forwarded-for'] ||
           req.connection.remoteAddress;
-          console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /Register; By EMAIL :'+EMAIL+", STATUS :"+sts );
+          logs("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /Register; By EMAIL :'+EMAIL+", STATUS :"+sts );
           //end notifiocation 
         }
     });
@@ -214,7 +220,7 @@ app.post('/register', (req, res) => {
    // notification 
  var ip = req.headers['x-forwarded-for'] ||
  req.connection.remoteAddress;
- console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /Register; By EMAIL :'+EMAIL+", STATUS :"+sts );
+ logs("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /Register; By EMAIL :'+EMAIL+", STATUS :"+sts );
  //end notifiocation 
  
 });
@@ -235,7 +241,7 @@ app.post('/peek', (req, res) => {
               // notification 
               var ip = req.headers['x-forwarded-for'] ||
               req.connection.remoteAddress;
-              console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /peek USER :'+name+' Peek at '+rows[0].name+'. Picture id : '+id  );
+              logs("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /peek USER :'+name+' Peek at '+rows[0].name+'. Picture id : '+id  );
               //end notifiocation 
    
     });
@@ -261,7 +267,7 @@ app.post('/list', (req, res) => {
               // notification 
               var ip = req.headers['x-forwarded-for'] ||
               req.connection.remoteAddress;
-              console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /List'  );
+              logs("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /List'  );
               //end notifiocation 
    
     });
@@ -295,7 +301,7 @@ app.post('/save', (req, res) => {
               // notification 
               var ip = req.headers['x-forwarded-for'] ||
               req.connection.remoteAddress;
-              console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /Save  By EMAIL :'+EMAIL );
+              logs("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /Save  By EMAIL :'+EMAIL );
               //end notifiocation 
    
     });
@@ -321,7 +327,7 @@ app.post('/login', (req, res) => {
           // notification 
           var ip = req.headers['x-forwarded-for'] ||
           req.connection.remoteAddress;
-          console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /Login; By EMAIL :'+EMAIL+", STATUS : user "+sts+" is logged" );
+          logs("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /Login; By EMAIL :'+EMAIL+", STATUS : user "+sts+" is logged" );
           //end notifiocation 
         }else{
           sts="LOGIN_FAIL";
@@ -330,7 +336,7 @@ app.post('/login', (req, res) => {
           // notification 
           var ip = req.headers['x-forwarded-for'] ||
           req.connection.remoteAddress;
-          console.log("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /Login; By EMAIL :'+EMAIL+", STATUS :"+sts );
+          logs("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /Login; By EMAIL :'+EMAIL+", STATUS :"+sts );
           //end notifiocation 
         }
     });
@@ -346,7 +352,9 @@ app.post('/login', (req, res) => {
  
       
 app.listen(port);
-console.log('Listening at http://localhost:' + port)
+logs('-------------------------------------------------------------------------------');
+logs( '['+svrts()+' ~] "SERVER START,Listening at http://localhost:' + port );
+logs('-------------------------------------------------------------------------------');
  
 
 
@@ -359,6 +367,12 @@ function addDays(date, days) {
   result.setDate(result.getDate() + days);
   return result;
 }
+
+function logs(s){
+console.log(s);
+logger.log(s);
+}
+ 
 
 function svrts(){ // timestamp 
 
