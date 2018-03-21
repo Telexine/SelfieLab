@@ -15,7 +15,7 @@ before_script:
   - npm --version
   - node_modules/.bin/newman --version
   - npm --prefix ./Server install ./Server
-  - npm --prefix ./Server Serverupdate ./Server
+ 
  
 script:
   - node Server/server.js
