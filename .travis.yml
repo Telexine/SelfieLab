@@ -14,7 +14,9 @@ before_script:
   - node --version
   - npm --version
   - node_modules/.bin/newman --version
-  - npm install
+  - npm --prefix ./Server install ./Server
+  - npm --prefix ./Server Serverupdate ./Server
+ 
 script:
   - node Server/server.js
   - node_modules/.bin/newman run Server/unit_test/Selfie.postman_collection.json
