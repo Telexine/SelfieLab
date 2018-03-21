@@ -1,7 +1,12 @@
 language: node_js
 node_js:
   - "8.2.1"
+services:
+  - mysql
 
+before_install:
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS SelfieLab;'  
+  - mysql -u root --password="" < sqlscripts/travis.sql
 install:
   - npm install newman
 
@@ -9,6 +14,7 @@ before_script:
   - node --version
   - npm --version
   - node_modules/.bin/newman --version
-  
+  - npm install
 script:
+  - node Server/server.js
   - node_modules/.bin/newman run Server/unit_test/Selfie.postman_collection.json
