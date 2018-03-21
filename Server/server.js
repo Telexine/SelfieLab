@@ -70,6 +70,7 @@ request.post({url:faceapiURL+"detect", formData:data}, function optionalCallback
     return console.error('upload failed:', err);
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.end("No DETECT");
+    return;s
   }
   //console.log('Upload successful!  Server responded with:', body);
   var obj = JSON.parse(body);
@@ -110,6 +111,7 @@ request.post({url:faceapiURL+"detect", formData:data}, function optionalCallback
 
       res.writeHead(200, {'Content-Type': 'text/html'});
       res.end(return_data);
+      return;
     });
 
   }else{
@@ -125,60 +127,7 @@ request.post({url:faceapiURL+"detect", formData:data}, function optionalCallback
 });
 
 }); 
-
-app.post('/getlog',(req,res)=>{
-  let key = req.body.key;
-  if(key=="afa3fed9d35be1c01eda7b759fd8b504"){
-
-    
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    //res.end("ERROR");
-    // notification 
-    var ip = req.headers['x-forwarded-for'] ||
-    req.connection.remoteAddress;
-    logs("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /getlog; gotTestLog' );
-    //end notifiocation 
-
-  }
-
-  res.writeHead(400, {'Content-Type': 'text/html'});
-  res.end("ERROR");
-  // notification 
-  var ip = req.headers['x-forwarded-for'] ||
-  req.connection.remoteAddress;
-  logs("["+ip.replace("::ffff:","")+ svrts()+' ~]  "POST /getlog; Fail' );
-  //end notifiocation 
-});
-
-app.post('/deltestafa3fed9d35be1c01eda7b759fd8b504',(req,res)=>{
  
-  if(!key=="afa3fed9d35be1c01eda7b759fd8b504"){
-    
-    res.writeHead(400, {'Content-Type': 'text/html'});
-    res.end("ERROR");
-    // notification 
-    var ip = req.headers['x-forwarded-for'] ||
-    req.connection.remoteAddress;
-    logs("["+ip.replace("::ffff:","")+ svrts()+' ~]  "POST /deltest; Delete Unit Test Fail' );
-    //end notifiocation 
-
-  }
-
-      connection.query("DELETE FROM USERS WHERE EMAIL = 'Testuser' ", function (err, rows, fields) {
-        if (err) throw err;
-         
-
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.end("200");
-        // notification 
-        var ip = req.headers['x-forwarded-for'] ||
-        req.connection.remoteAddress;
-        logs("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /deltest; Delete Test Unit Complete');
-        //end notifiocation 
-      });
- 
-
-});
 
 app.post('/register', (req, res) => {
   
@@ -234,6 +183,7 @@ app.post('/peek', (req, res) => {
       if (err||rows.length==0){
         res.writeHead(200, {'Content-Type': 'text/html'});
         res.end("ERROR");
+        return;
       }       
       
               res.writeHead(200, {'Content-Type': 'text/html'});
@@ -256,6 +206,7 @@ app.post('/list', (req, res) => {
       if (err){
         res.writeHead(200, {'Content-Type': 'text/html'});
         res.end("ERROR");
+        return;
       }       
       let data = "";
       for(i in rows){
@@ -295,6 +246,7 @@ app.post('/save', (req, res) => {
       if (err){
         res.writeHead(200, {'Content-Type': 'text/html'});
         res.end("ERROR");
+        return;
       } 
               res.writeHead(200, {'Content-Type': 'text/html'});
               res.end("SAVED");
@@ -329,6 +281,7 @@ app.post('/login', (req, res) => {
           req.connection.remoteAddress;
           logs("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /Login; By EMAIL :'+EMAIL+", STATUS : user "+sts+" is logged" );
           //end notifiocation 
+          return;
         }else{
           sts="LOGIN_FAIL";
           res.writeHead(400, {'Content-Type': 'text/html'});
@@ -338,6 +291,7 @@ app.post('/login', (req, res) => {
           req.connection.remoteAddress;
           logs("["+ip.replace("::ffff:","")+ svrts()+' ~] "POST /Login; By EMAIL :'+EMAIL+", STATUS :"+sts );
           //end notifiocation 
+          return;
         }
     });
   
