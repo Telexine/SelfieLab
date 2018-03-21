@@ -18,5 +18,5 @@ before_script:
  
  
 script:
-  - node Server/server.js
+  - node Server/server.js &
   - node_modules/.bin/newman run Server/unit_test/Selfie.postman_collection.json
