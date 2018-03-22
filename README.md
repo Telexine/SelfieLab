@@ -45,3 +45,9 @@ Server API,Backend (Node js Express)
 - sudo forever server.js (for run it forever but need to install forever first with -  npm install forever -g)
 ```
 
+### Update Path Android
+
+in _function.java  add your server path 
+```
+  public static final String _ServerUrl =    "http://path-to-your/server";
+```
