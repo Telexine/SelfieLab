@@ -7,9 +7,11 @@
  - Firebase
  - Face++ API
  - mysql
+ ![Stack](https://github.com/Telexine/SelfieLab/blob/master/Screen%20Shot%202562-01-12%20at%2013.38.13.png?raw=true)
  
  ## Getting Started
 
+ 
  
  ### File Structure
  
@@ -51,3 +53,11 @@ in _function.java  add your server path
 ```
   public static final String _ServerUrl =    "http://path-to-your/server";
 ```
+
+### Screen Shot
+
+
+ ![SS](https://github.com/Telexine/SelfieLab/blob/master/Screen%20Shot%202562-01-12%20at%2013.38.44.png)
+ ![SS](https://github.com/Telexine/SelfieLab/blob/master/Screen%20Shot%202562-01-12%20at%2013.39.04.png?raw=true)
+ ![SS](https://github.com/Telexine/SelfieLab/blob/master/Screen%20Shot%202562-01-12%20at%2013.39.11.png)
+ 
